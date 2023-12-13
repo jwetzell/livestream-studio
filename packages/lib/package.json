@@ -1,12 +1,13 @@
 {
   "name": "livestream-studio-lib",
   "version": "0.1.0",
-  "description": "",
+  "description": "Library for decoding packets from Livestream Studio application",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com/"
+  },
   "license": "ISC"
 }
