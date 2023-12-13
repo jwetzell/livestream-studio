@@ -1,12 +1,32 @@
 {
   "name": "livestream-studio",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "Collection of Livestream Studio packages",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "vimeo",
+    "livestream",
+    "live",
+    "stream",
+    "studio",
+    "studio 6"
+  ],
+  "author": {
+    "name": "Joel Wetzell",
+    "email": "me@jwetzell.com",
+    "url": "https://jwetzell.com/"
+  },
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.51.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.3"
+  },
+  "workspaces": [
+    "packages/lib"
+  ]
 }
