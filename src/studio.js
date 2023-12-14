@@ -5,6 +5,10 @@ class Studio extends EventEmitter {
   constructor(ip) {
     super();
     this.inputs = [];
+    this.audio = {
+      stream: {},
+      record: {},
+    };
     this.ip = ip;
     this.connect();
   }
@@ -41,6 +45,24 @@ class Studio extends EventEmitter {
         break;
       case 'PwIS':
         this.preview = Number.parseInt(this.latestPacket.parts[1], 10);
+        break;
+      case 'SVC':
+        this.audio.stream.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
+        break;
+      case 'SMC':
+        this.audio.stream.mute = this.latestPacket.parts[1] === '1';
+        break;
+      case 'SSC':
+        this.audio.stream.monitor = this.latestPacket.parts[1] === '1';
+        break;
+      case 'RVC':
+        this.audio.record.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
+        break;
+      case 'RMC':
+        this.audio.record.mute = this.latestPacket.parts[1] === '1';
+        break;
+      case 'RSC':
+        this.audio.record.monitor = this.latestPacket.parts[1] === '1';
         break;
       default:
         packetDecoded = false;
@@ -108,6 +130,7 @@ class Studio extends EventEmitter {
       inputs: this.inputs,
       program: this.program,
       preview: this.preview,
+      audio: this.audio,
     };
   }
 }
