@@ -11,6 +11,7 @@ class Studio extends EventEmitter {
     };
     this.status = {};
     this.graphics = [];
+    this.tBar = {};
     this.ip = ip;
     this.connect();
   }
@@ -145,7 +146,7 @@ class Studio extends EventEmitter {
     }
 
     if (packetDecoded) {
-      this.emit('update');
+      this.emit('update', this.latestPacket.type);
     }
   }
 
