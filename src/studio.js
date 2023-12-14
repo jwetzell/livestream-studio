@@ -17,7 +17,7 @@ class Studio extends EventEmitter {
       parts: packetParts,
       raw: packet,
     };
-
+    let packetDecoded = true;
     switch (this.latestPacket.type) {
       case 'ILCC':
         this.inputCount = Number.parseInt(this.latestPacket.parts[1], 10);
@@ -37,11 +37,14 @@ class Studio extends EventEmitter {
         };
         break;
       default:
+        packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
         break;
     }
 
-    this.emit('update');
+    if (packetDecoded) {
+      this.emit('update');
+    }
   }
 
   #setupSocket() {
@@ -63,7 +66,6 @@ class Studio extends EventEmitter {
       setTimeout(() => {
         this.connect();
       }, 5000);
-      this.emit('error', error);
     });
 
     this.socket.on('data', (data) => {
@@ -92,6 +94,13 @@ class Studio extends EventEmitter {
       this.#setupSocket();
       this.socket.connect(9923, this.ip);
     }
+  }
+
+  toJSON() {
+    return {
+      inputCount: this.inputCount,
+      inputs: this.inputs,
+    };
   }
 }
 
