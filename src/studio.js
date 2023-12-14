@@ -64,6 +64,13 @@ class Studio extends EventEmitter {
       case 'RSC':
         this.audio.record.monitor = this.latestPacket.parts[1] === '1';
         break;
+      case 'FIn':
+        this.fadeToBlack = false;
+        break;
+      case 'FOut':
+        this.fadeToBlack = true;
+        break;
+
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
@@ -131,6 +138,7 @@ class Studio extends EventEmitter {
       program: this.program,
       preview: this.preview,
       audio: this.audio,
+      fadeToBlack: this.fadeToBlack,
     };
   }
 }
