@@ -123,6 +123,21 @@ class Studio extends EventEmitter {
           }
         }
         break;
+      case 'TrAStart':
+      case 'TrAStop':
+        this.tBar.status = this.latestPacket.type.slice(3);
+        if (this.latestPacket.type === 'TrAStop') {
+          this.tBar.percent = 0;
+        }
+        break;
+      case 'TrASp':
+      case 'TrMSp':
+        this.tBar.status = this.latestPacket.type === 'TrASp' ? 'Automatic' : 'Manual';
+        this.tBar.percent = Number.parseInt(this.latestPacket.parts[1], 10) / 10;
+        if (this.tBar.percent === 0) {
+          this.tBar.status = 'Stop';
+        }
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
@@ -193,6 +208,7 @@ class Studio extends EventEmitter {
       fadeToBlack: this.fadeToBlack,
       status: this.status,
       graphics: this.graphics,
+      tBar: this.tBar,
     };
   }
 }
