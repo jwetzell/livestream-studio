@@ -9,6 +9,7 @@ class Studio extends EventEmitter {
       stream: {},
       record: {},
     };
+    this.status = {};
     this.ip = ip;
     this.connect();
   }
@@ -70,7 +71,18 @@ class Studio extends EventEmitter {
       case 'FOut':
         this.fadeToBlack = true;
         break;
-
+      case 'StrStopped':
+      case 'StrStarting':
+      case 'StrStarted':
+      case 'StrStopping':
+        this.status.stream = this.latestPacket.type.slice(3);
+        break;
+      case 'RecStopped':
+      case 'RecStarting':
+      case 'RecStarted':
+      case 'RecStopping':
+        this.status.record = this.latestPacket.type.slice(3);
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
@@ -139,6 +151,7 @@ class Studio extends EventEmitter {
       preview: this.preview,
       audio: this.audio,
       fadeToBlack: this.fadeToBlack,
+      status: this.status,
     };
   }
 }
