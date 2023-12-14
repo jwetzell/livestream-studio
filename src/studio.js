@@ -5,10 +5,16 @@ class Studio extends EventEmitter {
   constructor(ip) {
     super();
     this.inputs = [];
-    this.audio = {
-      stream: {},
-      record: {},
+
+    this.stream = {
+      audio: {},
+      status: 'Stopped',
     };
+    this.record = {
+      audio: {},
+      status: 'Stopped',
+    };
+
     this.status = {};
     this.graphics = [];
     this.tBar = {};
@@ -50,22 +56,22 @@ class Studio extends EventEmitter {
         this.preview = Number.parseInt(this.latestPacket.parts[1], 10);
         break;
       case 'SVC':
-        this.audio.stream.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
+        this.stream.audio.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
         break;
       case 'SMC':
-        this.audio.stream.mute = this.latestPacket.parts[1] === '1';
+        this.stream.audio.mute = this.latestPacket.parts[1] === '1';
         break;
       case 'SSC':
-        this.audio.stream.monitor = this.latestPacket.parts[1] === '1';
+        this.stream.audio.monitor = this.latestPacket.parts[1] === '1';
         break;
       case 'RVC':
-        this.audio.record.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
+        this.record.audio.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
         break;
       case 'RMC':
-        this.audio.record.mute = this.latestPacket.parts[1] === '1';
+        this.record.audio.mute = this.latestPacket.parts[1] === '1';
         break;
       case 'RSC':
-        this.audio.record.monitor = this.latestPacket.parts[1] === '1';
+        this.record.audio.monitor = this.latestPacket.parts[1] === '1';
         break;
       case 'FIn':
         this.fadeToBlack = false;
@@ -77,13 +83,13 @@ class Studio extends EventEmitter {
       case 'StrStarting':
       case 'StrStarted':
       case 'StrStopping':
-        this.status.stream = this.latestPacket.type.slice(3);
+        this.stream.status = this.latestPacket.type.slice(3);
         break;
       case 'RecStopped':
       case 'RecStarting':
       case 'RecStarted':
       case 'RecStopping':
-        this.status.record = this.latestPacket.type.slice(3);
+        this.record.status = this.latestPacket.type.slice(3);
         break;
       case 'GMOn':
       case 'GMOff':
@@ -225,9 +231,9 @@ class Studio extends EventEmitter {
       inputs: this.inputs,
       program: this.program,
       preview: this.preview,
-      audio: this.audio,
+      stream: this.stream,
+      record: this.record,
       fadeToBlack: this.fadeToBlack,
-      status: this.status,
       graphics: this.graphics,
       tBar: this.tBar,
     };
