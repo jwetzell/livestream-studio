@@ -221,6 +221,56 @@ class Studio extends EventEmitter {
     });
   }
 
+  cut() {
+    this.#sendCommand('RCut');
+  }
+
+  auto() {
+    this.#sendCommand('RAuto');
+  }
+
+  setFadeToBlack(shouldFTB) {
+    this.#sendCommand(`RF${shouldFTB ? 'Out' : 'In'}`);
+  }
+
+  setPreview(inputNumber) {
+    if (inputNumber !== undefined && Number.isInteger(inputNumber)) {
+      this.#sendCommand(`SPrI:${inputNumber - 1}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  setProgram(inputNumber) {
+    if (inputNumber !== undefined && Number.isInteger(inputNumber)) {
+      this.#sendCommand(`SPmI:${inputNumber - 1}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  startStream() {
+    this.#sendCommand('StrStart');
+  }
+
+  stopStream() {
+    this.#sendCommand('StrStop');
+  }
+
+  startRecord() {
+    this.#sendCommand('RecStart');
+  }
+
+  stopRecord() {
+    this.#sendCommand('RecStop');
+  }
+
+  #sendCommand(command) {
+    if (this.socket && this.connected) {
+      this.socket.write(`${command}\n`);
+    }
+  }
+
   connect() {
     if (!this.connected && this.ip) {
       this.#setupSocket();
