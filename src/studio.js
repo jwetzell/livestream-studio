@@ -111,6 +111,18 @@ class Studio extends EventEmitter {
         }
         this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)].canPush = this.latestPacket.parts[2] === '1';
         break;
+      case 'MPause':
+      case 'MFP':
+      case 'MIOP':
+        if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
+          if (this.latestPacket.type === 'MPause') {
+            this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].mediaStatus = 'paused';
+          } else {
+            this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].mediaStatus =
+              this.latestPacket.type === 'MFP' ? 'playFull' : 'playInOut';
+          }
+        }
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
