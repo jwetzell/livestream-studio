@@ -49,8 +49,14 @@ class Studio extends EventEmitter {
     });
 
     this.socket.on('data', (data) => {
-      console.log(data);
-      this.update(data.toString());
+      data
+        .toString()
+        .split('\n')
+        .forEach((packet) => {
+          if (packet.trim()) {
+            this.update(packet);
+          }
+        });
     });
 
     this.socket.on('close', (hadError) => {
