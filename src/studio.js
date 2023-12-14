@@ -36,6 +36,12 @@ class Studio extends EventEmitter {
           type: this.latestPacket.parts[8],
         };
         break;
+      case 'PmIS':
+        this.program = Number.parseInt(this.latestPacket.parts[1], 10);
+        break;
+      case 'PwIS':
+        this.preview = Number.parseInt(this.latestPacket.parts[1], 10);
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
@@ -100,6 +106,8 @@ class Studio extends EventEmitter {
     return {
       inputCount: this.inputCount,
       inputs: this.inputs,
+      program: this.program,
+      preview: this.preview,
     };
   }
 }
