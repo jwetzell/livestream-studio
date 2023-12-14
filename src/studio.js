@@ -139,6 +139,26 @@ class Studio extends EventEmitter {
           this.tBar.status = 'Stop';
         }
         break;
+      case 'AOC':
+        if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.program =
+            this.latestPacket.parts[2] !== '0';
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.programLock =
+            this.latestPacket.parts[2] === '1';
+        }
+        break;
+      case 'AMC':
+        if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.mute =
+            this.latestPacket.parts[2] === '1';
+        }
+        break;
+      case 'ASC':
+        if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.monitor =
+            this.latestPacket.parts[2] === '1';
+        }
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
