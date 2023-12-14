@@ -43,7 +43,7 @@ class Studio extends EventEmitter {
             level: parseFloat(this.latestPacket.parts[3]) / 1000,
             gain: parseFloat(this.latestPacket.parts[4]) / 1000,
             mute: this.latestPacket.parts[5] === '1',
-            monitor: this.latestPacket.parts[6] === '1',
+            solo: this.latestPacket.parts[6] === '1',
             programLock: this.latestPacket.parts[7] === '1',
           },
           type: this.latestPacket.parts[8],
@@ -62,7 +62,7 @@ class Studio extends EventEmitter {
         this.stream.audio.mute = this.latestPacket.parts[1] === '1';
         break;
       case 'SSC':
-        this.stream.audio.monitor = this.latestPacket.parts[1] === '1';
+        this.stream.audio.solo = this.latestPacket.parts[1] === '1';
         break;
       case 'RVC':
         this.record.audio.level = Number.parseInt(this.latestPacket.parts[1], 10) / 1000;
@@ -71,7 +71,7 @@ class Studio extends EventEmitter {
         this.record.audio.mute = this.latestPacket.parts[1] === '1';
         break;
       case 'RSC':
-        this.record.audio.monitor = this.latestPacket.parts[1] === '1';
+        this.record.audio.solo = this.latestPacket.parts[1] === '1';
         break;
       case 'FIn':
         this.fadeToBlack = false;
@@ -161,7 +161,7 @@ class Studio extends EventEmitter {
         break;
       case 'ASC':
         if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
-          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.monitor =
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.solo =
             this.latestPacket.parts[2] === '1';
         }
         break;
