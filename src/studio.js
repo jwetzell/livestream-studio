@@ -18,6 +18,9 @@ class Studio extends EventEmitter {
     };
 
     switch (this.latestPacket.type) {
+      case 'ILCC':
+        this.inputCount = Number.parseInt(this.latestPacket.parts[1], 10);
+        break;
       default:
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
         break;
