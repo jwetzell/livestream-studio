@@ -10,6 +10,7 @@ class Studio extends EventEmitter {
       record: {},
     };
     this.status = {};
+    this.graphics = [];
     this.ip = ip;
     this.connect();
   }
@@ -83,6 +84,33 @@ class Studio extends EventEmitter {
       case 'RecStopping':
         this.status.record = this.latestPacket.type.slice(3);
         break;
+      case 'GMOn':
+      case 'GMOff':
+        if (this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] === undefined) {
+          this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] = {};
+        }
+        this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)].status = this.latestPacket.type.slice(2);
+        break;
+      case 'GMPvH':
+      case 'GMPvS':
+        if (this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] === undefined) {
+          this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] = {};
+        }
+        this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)].preview = this.latestPacket.type === 'GMPvS';
+        break;
+      case 'GMOH':
+      case 'GMOS':
+        if (this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] === undefined) {
+          this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] = {};
+        }
+        this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)].pushed = this.latestPacket.type === 'GMOS';
+        break;
+      case 'GPA':
+        if (this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] === undefined) {
+          this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)] = {};
+        }
+        this.graphics[Number.parseInt(this.latestPacket.parts[1], 10)].canPush = this.latestPacket.parts[2] === '1';
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
@@ -152,6 +180,7 @@ class Studio extends EventEmitter {
       audio: this.audio,
       fadeToBlack: this.fadeToBlack,
       status: this.status,
+      graphics: this.graphics,
     };
   }
 }
