@@ -4,6 +4,7 @@ const { Socket } = require('node:net');
 class Studio extends EventEmitter {
   constructor(ip) {
     super();
+    this.inputs = [];
     this.ip = ip;
     this.connect();
   }
@@ -20,6 +21,20 @@ class Studio extends EventEmitter {
     switch (this.latestPacket.type) {
       case 'ILCC':
         this.inputCount = Number.parseInt(this.latestPacket.parts[1], 10);
+        break;
+      case 'ILC':
+        this.inputs[this.latestPacket.parts[1]] = {
+          number: Number.parseInt(this.latestPacket.parts[1], 10) + 1,
+          name: this.latestPacket.parts[2].replaceAll('"', ''),
+          audio: {
+            level: parseFloat(this.latestPacket.parts[3]) / 1000,
+            gain: parseFloat(this.latestPacket.parts[4]) / 1000,
+            mute: this.latestPacket.parts[5] === '1',
+            monitor: this.latestPacket.parts[6] === '1',
+            programLock: this.latestPacket.parts[7] === '1',
+          },
+          type: this.latestPacket.parts[8],
+        };
         break;
       default:
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
