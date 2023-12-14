@@ -165,6 +165,9 @@ class Studio extends EventEmitter {
             this.latestPacket.parts[2] === '1';
         }
         break;
+      case 'Cut':
+        // TODO(jwetzell): should something happen here?
+        break;
       default:
         packetDecoded = false;
         console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
