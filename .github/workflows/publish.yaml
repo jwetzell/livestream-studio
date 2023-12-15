@@ -5,16 +5,18 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       - name: install dependencies
         run: npm ci
-      - name: publish to NPM
-        run: npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: publish to npm
+        uses: JS-DevTools/npm-publish@v3.0.1
+        with:
+          token: ${{secrets.NPM_TOKEN}}
+          provenance: true
