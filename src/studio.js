@@ -297,6 +297,29 @@ class Studio extends EventEmitter {
     }
   }
 
+  playMediaFull(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`RMFP:${inputNum - 1}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  playMediaInOut(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`RMIOP:${inputNum - 1}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  pauseMedia(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`RMPause:${inputNum - 1}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
 
   #sendCommand(command) {
     if (this.socket && this.connected) {
