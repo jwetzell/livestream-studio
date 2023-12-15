@@ -10,6 +10,10 @@
   "scripts": {
     "dev": "nodemon dev.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwetzell/livestream-studio.git"
+  },
   "keywords": [
     "vimeo",
     "livestream",
