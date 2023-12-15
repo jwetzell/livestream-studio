@@ -23,6 +23,16 @@ class Studio extends EventEmitter {
     this.connect();
   }
 
+  #updateInputCount(newInputCount) {
+    if (this.inputCount !== undefined) {
+      // TODO(jwetzell): I think this is all we can safely do as we don't know what happened
+      // an input could be moved, added, deleted and input updates always come after an input count "update"
+      this.inputs = [];
+    }
+
+    this.inputCount = newInputCount;
+  }
+
   update(packet) {
     const packetParts = packet.trim().split(':');
 
@@ -34,7 +44,7 @@ class Studio extends EventEmitter {
     let packetDecoded = true;
     switch (this.latestPacket.type) {
       case 'ILCC':
-        this.inputCount = Number.parseInt(this.latestPacket.parts[1], 10);
+        this.#updateInputCount(Number.parseInt(this.latestPacket.parts[1], 10));
         break;
       case 'ILC':
         this.inputs[this.latestPacket.parts[1]] = {
