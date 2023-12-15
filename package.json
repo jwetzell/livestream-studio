@@ -3,6 +3,10 @@
   "version": "0.19.2",
   "main": "index.js",
   "description": "Library for interacting with an instance of Livestream Studio",
+  "files": [
+    "index.js",
+    "src/*"
+  ],
   "scripts": {
     "dev": "nodemon dev.js"
   },
