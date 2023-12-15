@@ -1,5 +1,6 @@
 const { EventEmitter } = require('node:events');
 const { Socket } = require('node:net');
+const { convertFloatToAudioLevel, convertFloatToGainLevel } = require('./utils');
 
 class Studio extends EventEmitter {
   constructor(ip) {
@@ -328,6 +329,72 @@ class Studio extends EventEmitter {
   pauseMedia(inputNum) {
     if (inputNum !== undefined && Number.isInteger(inputNum)) {
       this.#sendCommand(`RMPause:${inputNum - 1}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  setInputVolumeLevel(inputNum, audioLevel) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      const formattedAudioLevel = convertFloatToAudioLevel(audioLevel);
+      this.#sendCommand(`SIVL:${inputNum - 1}:${formattedAudioLevel}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  setInputGainLevel(inputNum, gainLevel) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      const formattedGainLevel = convertFloatToGainLevel(gainLevel);
+      this.#sendCommand(`SIGL:${inputNum - 1}:${formattedGainLevel}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  muteInput(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`IAM:${inputNum - 1}:1`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  unmuteInput(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`IAM:${inputNum - 1}:0`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  soloInput(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`IAH:${inputNum - 1}:1`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  unsoloInput(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`IAH:${inputNum - 1}:0`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  lockInputAudioToProgram(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`IAP:${inputNum - 1}:1`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
+  unlockInputAudioFromProgram(inputNum) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      this.#sendCommand(`IAP:${inputNum - 1}:0`);
     } else {
       throw new Error('input number must be an integer');
     }
