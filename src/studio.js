@@ -400,6 +400,48 @@ class Studio extends EventEmitter {
     }
   }
 
+  setStreamVolumeLevel(audioLevel) {
+    const formattedAudioLevel = convertFloatToAudioLevel(audioLevel);
+    this.#sendCommand(`SSVL:${formattedAudioLevel}`);
+  }
+
+  muteStream() {
+    this.#sendCommand(`SM:1`);
+  }
+
+  unmuteStream() {
+    this.#sendCommand(`SM:0`);
+  }
+
+  soloStream() {
+    this.#sendCommand(`SH:1`);
+  }
+
+  unsoloStream() {
+    this.#sendCommand(`SH:0`);
+  }
+
+  setRecordVolumeLevel(audioLevel) {
+    const formattedAudioLevel = convertFloatToAudioLevel(audioLevel);
+    this.#sendCommand(`SRVL:${formattedAudioLevel}`);
+  }
+
+  muteRecord() {
+    this.#sendCommand(`RM:1`);
+  }
+
+  unmuteRecord() {
+    this.#sendCommand(`RM:0`);
+  }
+
+  soloRecord() {
+    this.#sendCommand(`RH:1`);
+  }
+
+  unsoloRecord() {
+    this.#sendCommand(`RH:0`);
+  }
+
   #sendCommand(command) {
     if (this.socket && this.connected) {
       this.socket.write(`${command}\n`);
