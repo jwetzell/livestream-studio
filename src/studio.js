@@ -1,6 +1,6 @@
 const { EventEmitter } = require('node:events');
 const { Socket } = require('node:net');
-const { convertFloatToAudioLevel, convertFloatToGainLevel } = require('./utils');
+const { convertFloatToAudioLevel, convertFloatToGainLevel, convertFloatToIncrement } = require('./utils');
 
 class Studio extends EventEmitter {
   constructor(ip) {
@@ -343,6 +343,15 @@ class Studio extends EventEmitter {
     }
   }
 
+  incrementInputAudioLevel(inputNum, increment) {
+    if (inputNum !== undefined && Number.isInteger(inputNum)) {
+      const formattedIncrement = convertFloatToIncrement(increment);
+      this.#sendCommand(`IVL:${inputNum - 1}:${formattedIncrement}`);
+    } else {
+      throw new Error('input number must be an integer');
+    }
+  }
+
   setInputGainLevel(inputNum, gainLevel) {
     if (inputNum !== undefined && Number.isInteger(inputNum)) {
       const formattedGainLevel = convertFloatToGainLevel(gainLevel);
@@ -405,6 +414,11 @@ class Studio extends EventEmitter {
     this.#sendCommand(`SSVL:${formattedAudioLevel}`);
   }
 
+  incrementStreamAudioLevel(increment) {
+    const formattedIncrement = convertFloatToIncrement(increment);
+    this.#sendCommand(`SVL:${formattedIncrement}`);
+  }
+
   muteStream() {
     this.#sendCommand(`SM:1`);
   }
@@ -424,6 +438,11 @@ class Studio extends EventEmitter {
   setRecordVolumeLevel(audioLevel) {
     const formattedAudioLevel = convertFloatToAudioLevel(audioLevel);
     this.#sendCommand(`SRVL:${formattedAudioLevel}`);
+  }
+
+  incrementRecordAudioLevel(increment) {
+    const formattedIncrement = convertFloatToIncrement(increment);
+    this.#sendCommand(`RVL:${formattedIncrement}`);
   }
 
   muteRecord() {
