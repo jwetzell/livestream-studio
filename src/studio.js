@@ -183,7 +183,7 @@ class Studio extends EventEmitter {
         break;
       default:
         packetDecoded = false;
-        console.error(`lib: unrecognized packet type: ${this.latestPacket.type}`);
+        console.error(`studio: unrecognized packet type: <${this.latestPacket.type}> please report to maintainer`);
         break;
     }
 
@@ -201,13 +201,12 @@ class Studio extends EventEmitter {
     this.socket = new Socket();
     this.socket.on('connect', () => {
       this.connected = true;
-      console.log('studio: successfully connected');
       this.emit('connect');
     });
 
     this.socket.on('error', (error) => {
       this.connected = false;
-      console.error(`studio: socket error -> ${error.message}`);
+      this.emit('error', error);
       setTimeout(() => {
         this.connect();
       }, 5000);
@@ -226,7 +225,7 @@ class Studio extends EventEmitter {
 
     this.socket.on('close', (hadError) => {
       this.connected = false;
-      console.log(`studio: connection closed ${hadError ? 'with error' : 'normally'}`);
+      this.emit('close', hadError);
       setTimeout(() => {
         this.connect();
       }, 5000);
