@@ -265,6 +265,39 @@ class Studio extends EventEmitter {
     this.#sendCommand('RecStop');
   }
 
+  pushGraphic(graphicsNum) {
+    if (graphicsNum !== undefined && Number.isInteger(graphicsNum)) {
+      this.#sendCommand(`RGMOS:${graphicsNum - 1}`);
+    } else {
+      throw new Error('graphic number must be an integer');
+    }
+  }
+
+  pullGraphic(graphicsNum) {
+    if (graphicsNum !== undefined && Number.isInteger(graphicsNum)) {
+      this.#sendCommand(`RGMOH:${graphicsNum - 1}`);
+    } else {
+      throw new Error('graphic number must be an integer');
+    }
+  }
+
+  previewShowGraphic(graphicsNum) {
+    if (graphicsNum !== undefined && Number.isInteger(graphicsNum)) {
+      this.#sendCommand(`RGPvS:${graphicsNum - 1}`);
+    } else {
+      throw new Error('graphic number must be an integer');
+    }
+  }
+
+  previewHideGraphic(graphicsNum) {
+    if (graphicsNum !== undefined && Number.isInteger(graphicsNum)) {
+      this.#sendCommand(`RGMPvH:${graphicsNum - 1}`);
+    } else {
+      throw new Error('graphic number must be an integer');
+    }
+  }
+
+
   #sendCommand(command) {
     if (this.socket && this.connected) {
       this.socket.write(`${command}\n`);
