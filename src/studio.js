@@ -145,6 +145,18 @@ class Studio extends EventEmitter {
           this.tBar.status = 'Stop';
         }
         break;
+      case 'AVC':
+        if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.level =
+            Number.parseInt(this.latestPacket.parts[2], 10) / 1000;
+        }
+        break;
+      case 'AGC':
+        if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
+          this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.gain =
+            Number.parseInt(this.latestPacket.parts[2], 10) / 1000;
+        }
+        break;
       case 'AOC':
         if (this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]]) {
           this.inputs[[Number.parseInt(this.latestPacket.parts[1], 10)]].audio.program =
